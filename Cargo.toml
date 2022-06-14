@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 bevy = { version = "0.7", features = ["dynamic"] } # make sure this is the latest version
+
+[dependencies.bevy_fly_camera]
+path = "../bevy_fly_camera"
