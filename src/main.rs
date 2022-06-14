@@ -81,10 +81,4 @@ fn setup(
     commands
         .spawn_bundle(camera)
         .insert(GameCamera::default());
-
-    // camera
-    // commands
-    //     .spawn()
-    //     .insert_bundle(PerspectiveCameraBundle::new_3d())
-    //     .insert(FlyCamera::default());
 }
