@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 pub trait Structure {
     fn build(&self,
-        meshes: &mut Assets<Mesh>,
+        asset_server: &Res<AssetServer>,
         materials: &mut Assets<StandardMaterial>) -> PbrBundle;
 }
 

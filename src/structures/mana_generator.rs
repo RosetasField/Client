@@ -5,14 +5,11 @@ use bevy::prelude::*;
 impl Structure for ManaGenerator {
     fn build(
         &self,
-        meshes: &mut Assets<Mesh>,
+        asset_server: &Res<AssetServer>,
         materials: &mut Assets<StandardMaterial>) -> PbrBundle {
 
         PbrBundle {
-            mesh: meshes.add(Mesh::from(shape::Torus { 
-                radius: 3.0,
-                ..default()
-            })),
+            mesh: asset_server.load("castle.obj"),
             material: materials.add(Color::rgb(148.0 / 255.0, 0.0, 211.0 / 255.0).into()),
             transform: Transform::from_xyz(self.x, self.y, self.z),
             ..default()
