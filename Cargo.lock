@@ -198,7 +198,6 @@ name = "bevy-introduction"
 version = "0.1.0"
 dependencies = [
  "bevy",
- "bevy_fly_camera",
  "bevy_obj",
 ]
 
@@ -371,13 +370,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "bevy_fly_camera"
-version = "0.8.0"
-dependencies = [
- "bevy",
 ]
 
 [[package]]

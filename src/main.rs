@@ -2,11 +2,12 @@ use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::{prelude::*, window::*};
 
 use bevy_obj::*;
-use bevy_fly_camera::*;
-
 
 mod structures;
 use structures::structures::*;
+
+mod camera;
+use camera::{camera_movement::*, camera::*};
 
 fn main() {
     App::new()
@@ -15,7 +16,6 @@ fn main() {
             width: 1920.,
             height: 1080.,
             present_mode: PresentMode::Immediate,
-            cursor_visible: false,
             mode: WindowMode::BorderlessFullscreen,
             ..default()
         })
@@ -23,7 +23,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_startup_system(setup)
         .add_plugin(ObjPlugin)
-        .add_plugin(FlyCameraPlugin)
+        .add_plugin(GameCameraPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_plugin(LogDiagnosticsPlugin::default())
         .run();
@@ -45,13 +45,13 @@ fn setup(
 
     for i in 1..100 {
         commands.spawn_bundle(HeadQuarters {
-            x: i as f32 * 12.0,
+            x: i as f32 * 15.0,
             y: 0.5,
             z: 2.0,
         }.build(&asset_server, materials.as_mut()));
     
         commands.spawn_bundle(ManaGenerator {
-            x: i as f32 * 12.0,
+            x: i as f32 * 15.0,
             y: 0.5,
             z: 18.0,
         }.build(&asset_server, materials.as_mut()));
@@ -73,9 +73,18 @@ fn setup(
         transform: Transform::from_xyz(4.0, 8.0, 4.0),
         ..default()
     });
-    // camera
+
+    let mut camera = OrthographicCameraBundle::new_3d();
+    camera.orthographic_projection.scale = 19.0;
+    camera.transform = Transform::from_xyz(30.0, 60.0, 10.0).looking_at(Vec3::new(30.0, 0.5, 0.0), Vec3::Y);
+
     commands
-        .spawn()
-        .insert_bundle(PerspectiveCameraBundle::new_3d())
-        .insert(FlyCamera::default());
+        .spawn_bundle(camera)
+        .insert(GameCamera::default());
+
+    // camera
+    // commands
+    //     .spawn()
+    //     .insert_bundle(PerspectiveCameraBundle::new_3d())
+    //     .insert(FlyCamera::default());
 }

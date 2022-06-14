@@ -9,10 +9,7 @@ edition = "2021"
 bevy = { version = "0.7"} # make sure this is the latest version
 bevy_obj = "0.7.0"
 
-[dependencies.bevy_fly_camera]
-path = "../bevy_fly_camera"
-
-# Enable only a small amount of optimization in debug mode
+# Enable only a small amuont of optimization in debug mode
 [profile.dev]
 opt-level = 1
 
