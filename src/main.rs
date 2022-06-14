@@ -1,6 +1,10 @@
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
-use bevy::{prelude::*, window::PresentMode};
+use bevy::{prelude::*, window::*};
 use bevy_fly_camera::*;
+
+
+mod structures;
+use structures::structures::*;
 
 fn main() {
     App::new()
@@ -10,6 +14,7 @@ fn main() {
             height: 1080.,
             present_mode: PresentMode::Immediate,
             cursor_visible: false,
+            mode: WindowMode::Fullscreen,
             ..default()
         })
         .insert_resource(Msaa { samples: 4 })
@@ -26,19 +31,26 @@ fn setup(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
+
     // plane
     commands.spawn_bundle(PbrBundle {
-        mesh: meshes.add(Mesh::from(shape::Plane { size: 10.0 })),
+        mesh: meshes.add(Mesh::from(shape::Plane { size: 1000.0 })),
         material: materials.add(Color::rgb(0.9, 0.0, 0.2).into()),
         ..default()
     });
-    // cube
-    commands.spawn_bundle(PbrBundle {
-        mesh: meshes.add(Mesh::from(shape::Cube { size: 3.0 })),
-        material: materials.add(Color::rgb(0.8, 0.6, 0.0).into()),
-        transform: Transform::from_xyz(0.0, 0.5, 0.0),
-        ..default()
-    });
+
+    commands.spawn_bundle(HeadQuarters {
+        x: 2.0,
+        y: 0.5,
+        z: 2.0,
+    }.build(meshes.as_mut(), materials.as_mut()));
+
+    commands.spawn_bundle(ManaGenerator {
+        x: 5.0,
+        y: 0.5,
+        z: 6.0,
+    }.build(meshes.as_mut(), materials.as_mut()));
+
     // light
     commands.spawn_bundle(PointLightBundle {
         point_light: PointLight {
