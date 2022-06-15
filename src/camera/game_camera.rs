@@ -10,6 +10,8 @@ pub struct GameCamera {
 	pub yaw: f32,
 	/// If `false`, disables control of the camera. Defaults to `true`
 	pub enabled: bool,
+	/// Velocity
+	pub vel: Vec2
 }
 impl Default for GameCamera {
 	fn default() -> Self {
@@ -17,6 +19,7 @@ impl Default for GameCamera {
 			sensitivity: 1.0,
 			pitch: 0.0,
 			yaw: 0.0,
+			vel: Vec2::ZERO,
 			enabled: true,
 		}
 	}

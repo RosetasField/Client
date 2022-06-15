@@ -19,15 +19,15 @@ fn handle_mouse_scroll(
 		for ev in scroll_evr.iter() {
 			match ev.unit {
 				MouseScrollUnit::Line => {
-					let mut log_scale = projection.scale.ln();
-					log_scale -= ev.y * 0.05;
-					if log_scale < 9.0_f32.ln() {
-						log_scale = 9.0_f32.ln();
+					let mut log_scale = projection.scale;
+					log_scale -= ev.y * 1.05;
+					if log_scale < 9.0 {
+						log_scale = 9.0;
 					}
-					if log_scale > 50.0_f32.ln() {
-						log_scale = 50.0_f32.ln();
+					if log_scale > 50.0 {
+						log_scale = 50.0;
 					}
-					projection.scale = log_scale.exp();
+					projection.scale = log_scale;
 				}
 				MouseScrollUnit::Pixel => {
 				}
@@ -37,8 +37,9 @@ fn handle_mouse_scroll(
 }
 
 fn handle_mouse_position(
-    mut query: Query<(&mut GameCamera, &mut Transform)>,
-    mut windows: ResMut<Windows>
+    mut query: Query<&mut GameCamera>,
+    mut windows: ResMut<Windows>,
+	mut cursor_evt: EventReader<CursorMoved>
 ) {
     let win = windows.primary_mut();
 
@@ -50,48 +51,73 @@ fn handle_mouse_position(
         return;
     }
 
-    let cursor_position = win.cursor_position().unwrap();
-
-    let top: [Vec2; 2] = [Vec2::new(0.0, win.height() - (win.height() / 80.0)), Vec2::new(win.width(), win.height())];
+	let top: [Vec2; 2] = [Vec2::new(0.0, win.height() - (win.height() / 80.0)), Vec2::new(win.width(), win.height())];
     let bottom: [Vec2; 2] = [Vec2::new(0.0, 0.0), Vec2::new(win.width(), win.height() / 80.0)];
     let right: [Vec2; 2] = [Vec2::new(win.width() - (win.width() / 80.0), 0.0), Vec2::new(win.width(), win.height())];
     let left: [Vec2; 2] = [Vec2::new(0.0, 0.0), Vec2::new(win.width() / 80.0, win.height())];
 
-    for (options, mut transform) in query.iter_mut() {
-		println!("here");
+	if cursor_evt.is_empty() {
+		return;
+	}
+
+	let cursor = cursor_evt.iter().last().unwrap();
+
+	for mut options in query.iter_mut() {
 
 		let (axis_v, axis_h) = if options.enabled {
 			(
-				movement_axis(cursor_position, right, left),
-				movement_axis(cursor_position, bottom, top),
+				movement_axis(cursor.position, right, left),
+				movement_axis(cursor.position, bottom, top),
 			)
 		} else {
 			(0.0, 0.0)
 		};
 
+		options.vel = Vec2::new(axis_v * options.sensitivity, axis_h * options.sensitivity);
+	}
+
+}
+
+fn move_camera(
+    mut query: Query<(&mut GameCamera, &mut Transform)>,
+    mut windows: ResMut<Windows>,
+) {
+
+    let win = windows.primary_mut();
+
+    if win.is_focused() == false {
+        return;
+    }
+
+	for (options, mut transform) in query.iter_mut() {
+		if !options.enabled || options.vel == Vec2::ZERO {
+			return;
+		}
+
 		let (width_modifier, height_modifier) = 
 		if win.width() > win.height() {
 			(
-				axis_v * (options.sensitivity),
-				(((win.width() / win.height()) - 1.0) * (axis_h)) * (options.sensitivity),
+				options.vel.x,
+				((win.width() / win.height()) - 1.0) * (options.vel.y),
 			)
 		}
 
 		else if win.width() < win.height() {
 			(
-				(((win.height() / win.width()) - 1.0) * (axis_v)) * (options.sensitivity),
-				axis_h * (options.sensitivity),
+				((win.height() / win.width()) - 1.0) * (options.vel.x),
+				options.vel.y,
 			)
 
 		}
 		
 		else {
-			(axis_v * options.sensitivity, axis_h * options.sensitivity)
+			(options.vel.x * options.sensitivity, options.vel.y * options.sensitivity)
 		};
 
 		transform.translation += Vec3::new(width_modifier, 0.0, height_modifier);
 	}
 }
+
 
 
 pub struct GameCameraPlugin;
@@ -100,6 +126,7 @@ impl Plugin for GameCameraPlugin {
 	fn build(&self, app: &mut App) {
 		app
             .add_system(handle_mouse_position)
+            .add_system(move_camera)
             .add_system(handle_mouse_scroll);
 	}
 }
