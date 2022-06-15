@@ -1,5 +1,4 @@
-# 🪄 WizBattle
-<br>
+# | **🪄 WizBattle**
 
 ### You like magic stuff ? This game is for you (UwU)
 
@@ -10,6 +9,8 @@
 <br>
 
 # Install dependencies
+
+<br>
 
 > ## Windows
 
