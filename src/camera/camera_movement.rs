@@ -1,7 +1,43 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, input::mouse::*};
 
 use super::game_camera::GameCamera;
 use super::util::movement_axis;
+
+fn handle_mouse_scroll(
+	mut query: Query<&mut OrthographicProjection>,
+	mut scroll_evr: EventReader<MouseWheel>,
+	mut windows: ResMut<Windows>
+) {
+	let win = windows.primary_mut();
+
+    if win.is_focused() == false {
+        return;
+    }
+
+
+	for mut projection in query.iter_mut() {
+
+		for ev in scroll_evr.iter() {
+			match ev.unit {
+				MouseScrollUnit::Line => {
+					let mut log_scale = projection.scale.ln();
+					println!("previous Projection scale = {}", log_scale);
+					log_scale -= ev.y * 0.05;
+					if log_scale < 2.0_f32.ln() {
+						log_scale = 2.0_f32.ln();
+					}
+					if log_scale > 25.0_f32.ln() {
+						log_scale = 25.0_f32.ln();
+					}
+					projection.scale = log_scale.exp();
+					println!("Projection scale = {}", log_scale);
+				}
+				MouseScrollUnit::Pixel => {
+				}
+			}
+		}
+	}
+}
 
 fn handle_mouse_position(
     mut query: Query<(&mut GameCamera, &mut Transform)>,
@@ -65,6 +101,7 @@ pub struct GameCameraPlugin;
 impl Plugin for GameCameraPlugin {
 	fn build(&self, app: &mut App) {
 		app
-            .add_system(handle_mouse_position);
+            .add_system(handle_mouse_position)
+            .add_system(handle_mouse_scroll);
 	}
 }
