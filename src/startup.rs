@@ -11,7 +11,7 @@ use crate::camera::game_camera::*;
 
 #[path = "entities/mod.rs"]
 mod entities;
-use crate::entities::player::Player;
+use entities::player::Player;
 
 pub fn setup(
     mut commands: Commands,
