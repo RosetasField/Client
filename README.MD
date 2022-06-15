@@ -54,8 +54,12 @@ cargo build --release
 cargo run --release
 ```
 
+<br>
+
 ### Notes
 
 #### This game is using the wonderful *`Bevy`* framework
 
-###### Made with ❤️ by RqndomHax
+<br>
+
+# <u>_**Made with ❤️ by RqndomHax**_</u>
