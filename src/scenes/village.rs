@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, pbr::MeshUniform};
 
 #[path = "../structures/mod.rs"]
 mod structures;
@@ -17,9 +17,12 @@ impl Plugin for VillageScenePlugin {
 }
 
 fn destroy(mut commands: Commands, query: Query<Entity, With<Button>>) {
+    let mut i = 0.0;
     for ent in query.iter() {
+        i += 1.0;
         commands.entity(ent).despawn_recursive();
     }
+    println!("entities removed = {}", i);
 }
 
 fn setup_menu(

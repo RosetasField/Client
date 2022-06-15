@@ -15,7 +15,8 @@ pub struct MainMenuPlugin;
 impl Plugin for MainMenuPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_startup_system(setup_menu)
+            .add_startup_system(load_assets)
+            .add_system_set(SystemSet::on_enter(GameState::StartMenu).with_system(setup_menu))
             .add_system_set(SystemSet::on_exit(GameState::StartMenu).with_system(destroy))
             .add_system_set(SystemSet::on_update(GameState::StartMenu).with_system(handle_start_button));
     }
@@ -45,7 +46,7 @@ fn handle_start_button(
     }
 }
 
-fn setup_menu(
+fn load_assets(
     mut commands: Commands,
     assets: Res<AssetServer>
 ) {
@@ -54,8 +55,16 @@ fn setup_menu(
         button: assets.load("button.png")
     };
 
-    commands.spawn_bundle(UiCameraBundle::default());
-    commands.spawn_bundle(ButtonBundle {
+    commands.insert_resource(ui_assets);
+}
+
+fn setup_menu(
+    mut commands: Commands,
+    ui_assets: Res<UiAssets>
+) {
+
+    commands
+    .spawn_bundle(ButtonBundle {
         style: Style {
             align_self: AlignSelf::Center,
             align_items: AlignItems::Center,
@@ -95,5 +104,4 @@ fn setup_menu(
             });
     });
 
-    commands.insert_resource(ui_assets);
 }

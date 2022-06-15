@@ -17,6 +17,9 @@ use startup::*;
 mod scenes;
 use scenes::start_menu::MainMenuPlugin;
 
+mod keyboard;
+use keyboard::*;
+
 fn main() {
     App::new()
         .insert_resource(WindowDescriptor {
@@ -35,6 +38,7 @@ fn main() {
         .add_system(ui_example)
 
         .add_plugins(DefaultPlugins)
+        .add_plugin(KeyboardPlugin)
         .add_plugin(MainMenuPlugin)
         .add_plugin(VillageScenePlugin)
         .add_plugin(GameCameraPlugin)

@@ -121,8 +121,6 @@ fn move_camera(
 	}
 }
 
-
-
 pub struct GameCameraPlugin;
 
 impl Plugin for GameCameraPlugin {

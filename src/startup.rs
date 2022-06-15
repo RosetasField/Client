@@ -13,4 +13,7 @@ pub fn spawn_camera(
     .spawn_bundle(camera)
     .insert(GameCamera::default())
     .insert(MainCamera);
+
+    commands.spawn_bundle(UiCameraBundle::default());
+
 }
