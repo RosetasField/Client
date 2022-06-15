@@ -16,6 +16,8 @@
 
 - ### <u><a href="https://win.rustup.rs/">Click to install cargo</a></u>
 - ### <u><a href="https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16">Click to install VS2019 build tools</a></u>
+    &emsp; `Select "Desktop development with C++`<br>
+    &emsp; `Select "Universal Windows Platform build tools`
 - ### <u>`Install cargo-binutils`</u>
     ```bash
     cargo install -f cargo-binutils
@@ -34,10 +36,10 @@
     curl https://sh.rustup.rs -sSf | sh
     ```
 - ### <u><a href="https://github.com/bevyengine/bevy/blob/main/docs/linux_dependencies.md">Install _**Bevy**_ dependencies</a></u>
-- ### <u>`Install lld`</u>
-    > **Ubuntu:** ``sudo apt-get install lld``
+- ### <u>`Install clang and lld`</u>
+    > **Ubuntu:** ``sudo apt-get install clang lld``
 
-    > **Arch:** ``sudo pacman -S lld``
+    > **Arch:** ``sudo pacman -S clang lld``
 
 <br>
 
