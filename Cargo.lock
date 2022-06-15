@@ -194,14 +194,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy-introduction"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "bevy_obj",
-]
-
-[[package]]
 name = "bevy_animation"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -572,7 +564,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
- "uuid",
+ "uuid 0.8.2",
 ]
 
 [[package]]
@@ -627,7 +619,7 @@ dependencies = [
  "ron",
  "serde",
  "thiserror",
- "uuid",
+ "uuid 0.8.2",
 ]
 
 [[package]]
@@ -748,7 +740,7 @@ dependencies = [
  "hashbrown",
  "instant",
  "tracing",
- "uuid",
+ "uuid 0.8.2",
 ]
 
 [[package]]
@@ -1421,7 +1413,7 @@ dependencies = [
  "fnv",
  "gilrs-core",
  "log",
- "uuid",
+ "uuid 0.8.2",
  "vec_map",
 ]
 
@@ -1440,7 +1432,7 @@ dependencies = [
  "nix",
  "rusty-xinput",
  "stdweb 0.4.20",
- "uuid",
+ "uuid 0.8.2",
  "vec_map",
  "web-sys",
  "winapi",
@@ -2947,6 +2939,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "uuid"
+version = "1.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dd6469f4314d5f1ffec476e05f17cc9a78bc7a27a6a857842170bdf8d6f98d2f"
+dependencies = [
+ "getrandom",
+ "rand",
+ "uuid-macro-internal",
+]
+
+[[package]]
+name = "uuid-macro-internal"
+version = "1.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "548f7181a5990efa50237abb7ebca410828b57a8955993334679f8b50b35c97d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "valuable"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3256,6 +3270,15 @@ dependencies = [
  "web-sys",
  "winapi",
  "x11-dl",
+]
+
+[[package]]
+name = "wizbattle"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "bevy_obj",
+ "uuid 1.1.2",
 ]
 
 [[package]]
