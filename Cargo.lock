@@ -2516,6 +2516,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "rosetas-domain"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "bevy_obj",
+ "uuid 1.1.2",
+]
+
+[[package]]
 name = "rustc-hash"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3270,15 +3279,6 @@ dependencies = [
  "web-sys",
  "winapi",
  "x11-dl",
-]
-
-[[package]]
-name = "wizbattle"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "bevy_obj",
- "uuid 1.1.2",
 ]
 
 [[package]]

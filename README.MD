@@ -1,4 +1,4 @@
-# | **🪄 WizBattle**
+# | **🪄 Roseta's Domain**
 
 ### You like magic stuff ? This game is for you (UwU)
 
