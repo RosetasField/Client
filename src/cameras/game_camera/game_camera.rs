@@ -13,6 +13,7 @@ pub struct GameCamera {
 	/// Velocity
 	pub vel: Vec2
 }
+
 impl Default for GameCamera {
 	fn default() -> Self {
 		Self {

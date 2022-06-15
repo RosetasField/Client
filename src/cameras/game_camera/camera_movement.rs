@@ -1,10 +1,13 @@
 use bevy::{prelude::*, input::mouse::*};
 
 use super::game_camera::GameCamera;
-use super::util::movement_axis;
+
+use crate::states::*;
+
+use super::super::util::movement_axis;
 
 fn handle_mouse_scroll(
-	mut query: Query<&mut OrthographicProjection>,
+	mut query: Query<&mut OrthographicProjection, With<GameCamera>>,
 	mut scroll_evr: EventReader<MouseWheel>,
 	mut windows: ResMut<Windows>
 ) {
@@ -125,8 +128,9 @@ pub struct GameCameraPlugin;
 impl Plugin for GameCameraPlugin {
 	fn build(&self, app: &mut App) {
 		app
-            .add_system(handle_mouse_position)
-            .add_system(move_camera)
-            .add_system(handle_mouse_scroll);
+            .add_system_set(SystemSet::on_update(GameState::Village)
+				.with_system(handle_mouse_position)
+				.with_system(move_camera)
+				.with_system(handle_mouse_scroll));
 	}
 }
