@@ -1,4 +1,4 @@
-# | **🪄 Roseta's Domain**
+# | **🪄 Roseta's Field**
 
 ### You like magic stuff ? This game is for you (UwU)
 
