@@ -15,11 +15,11 @@ pub fn movement_axis(
 	let mut axis = 0.0;
 
     if is_contained(positive, position) {
-        axis += 1.0;
+        axis += 0.3;
     }
 
     if is_contained(negative, position) {
-        axis -= 1.0;
+        axis -= 0.3;
     }
     axis
 }

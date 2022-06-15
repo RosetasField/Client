@@ -7,15 +7,15 @@ mod structures;
 use structures::structures::*;
 
 mod camera;
-use camera::{camera_movement::*, camera::*};
+use camera::{camera_movement::*, game_camera::*};
 
 fn main() {
     App::new()
         .insert_resource(WindowDescriptor {
-            title: "bevy-introduction simple window".to_string(),
+            title: "WizBattle | DEV".to_string(),
             width: 1920.,
             height: 1080.,
-            present_mode: PresentMode::Immediate,
+            present_mode: PresentMode::Fifo,
             mode: WindowMode::BorderlessFullscreen,
             ..default()
         })
