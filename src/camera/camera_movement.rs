@@ -21,11 +21,11 @@ fn handle_mouse_scroll(
 				MouseScrollUnit::Line => {
 					let mut log_scale = projection.scale.ln();
 					log_scale -= ev.y * 0.05;
-					if log_scale < 2.0_f32.ln() {
-						log_scale = 2.0_f32.ln();
+					if log_scale < 9.0_f32.ln() {
+						log_scale = 9.0_f32.ln();
 					}
-					if log_scale > 25.0_f32.ln() {
-						log_scale = 25.0_f32.ln();
+					if log_scale > 50.0_f32.ln() {
+						log_scale = 50.0_f32.ln();
 					}
 					projection.scale = log_scale.exp();
 				}
