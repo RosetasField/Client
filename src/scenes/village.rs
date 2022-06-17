@@ -1,3 +1,4 @@
+use bevy::pbr::LightEntity;
 use bevy::prelude::*;
 
 use crate::cameras::cameras::GameCamera;
@@ -10,22 +11,35 @@ pub struct VillageScenePlugin;
 impl Plugin for VillageScenePlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_system_set(SystemSet::on_enter(GameState::Village).with_system(setup_menu))
-            .add_system_set(SystemSet::on_exit(GameState::Village).with_system(destroy));
+
+            .add_system_set(SystemSet::on_enter(GameState::Village)
+                .with_system(reset_camera)
+                .with_system(construct)
+            )
+
+            .add_system_set(SystemSet::on_exit(GameState::Village)
+                .with_system(destroy_structures)
+                .with_system(destroy_lights)
+            );
     }
 }
 
-fn destroy(mut commands: Commands, query: Query<Entity, With<structures::Type>>) {
-    for ent in query.iter() {
-        commands.entity(ent).despawn_recursive();
+fn reset_camera(
+    mut query: Query<(&mut Transform, (&mut OrthographicProjection, With<GameCamera>))>,
+) {
+
+    for (mut transform, mut projection) in query.iter_mut() {
+        transform.look_at(Vec3::new(15.0, 0.5, 0.0), Vec3::Y);
+        transform.with_translation(Vec3::new(15.0, 60.0, 10.0));
+        projection.0.scale = 50.0;
+        transform.translation = Vec3::new(15.0, 60.0, 10.0);
     }
 }
 
-fn setup_menu(
+fn construct(
     mut commands: Commands,
     mut materials: ResMut<Assets<StandardMaterial>>,
     assets: Res<structures::CustomAssets>,
-    mut query: Query<(&mut Transform, (&mut OrthographicProjection, With<GameCamera>))>,
 ) {
 
     for i in 1..100 {
@@ -47,10 +61,16 @@ fn setup_menu(
         brightness: 1.0,
     });
 
-    for (mut transform, mut projection) in query.iter_mut() {
-        transform.look_at(Vec3::new(15.0, 0.5, 0.0), Vec3::Y);
-        transform.with_translation(Vec3::new(15.0, 60.0, 10.0));
-        projection.0.scale = 50.0;
-        transform.translation = Vec3::new(15.0, 60.0, 10.0);
+}
+
+fn destroy_structures(mut commands: Commands, query: Query<Entity, With<structures::Type>>) {
+    for ent in query.iter() {
+        commands.entity(ent).despawn_recursive();
+    }
+}
+
+fn destroy_lights(mut commands: Commands, query: Query<Entity, With<LightEntity>>) {
+    for ent in query.iter() {
+        commands.entity(ent).despawn_recursive();
     }
 }

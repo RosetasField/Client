@@ -37,6 +37,7 @@ fn main() {
 
         .add_startup_system(spawn_camera)
         .add_startup_system(structures::load_assets)
+        .add_startup_system(decors::load_assets)
         .add_system(ui_example)
 
         .add_plugins(DefaultPlugins)

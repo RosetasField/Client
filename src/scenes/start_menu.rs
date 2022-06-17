@@ -1,8 +1,9 @@
-use bevy::{prelude::*, ui::FocusPolicy};
+use bevy::prelude::*;
 
 use crate::states::GameState;
 
 use crate::uis::*;
+use crate::entities::*;
 
 pub struct MainMenuPlugin;
 
@@ -13,66 +14,44 @@ impl Plugin for MainMenuPlugin {
             .add_startup_system(menu::load_assets)
 
             .add_system_set(SystemSet::on_enter(GameState::StartMenu)
-                .with_system(setup))
+                .with_system(construct_background)
+                .with_system(construct_buttons)
+            )
 
             .add_system_set(SystemSet::on_exit(GameState::StartMenu)
-                .with_system(destroy))
+                .with_system(destroy_background)
+                .with_system(destroy_buttons)
+            )
 
             .add_system_set(SystemSet::on_update(GameState::StartMenu)
                 .with_system(menu::handle_start_button));
     }
 }
 
-fn destroy(mut commands: Commands, query: Query<Entity, With<Button>>) {
+fn construct_background(
+    mut commands: Commands,
+    assets: Res<decors::CustomAssets>
+
+) {
+    decors::spawn_background(commands.spawn(), &assets);
+}
+
+fn construct_buttons(
+    mut commands: Commands,
+    ui_assets: Res<menu::Assets>
+) {
+    menu::construct_start_button(commands.spawn(), &ui_assets);
+}
+
+
+fn destroy_buttons(mut commands: Commands, query: Query<Entity, With<Button>>) {
     for ent in query.iter() {
         commands.entity(ent).despawn_recursive();
     }
 }
 
-fn setup(
-    mut commands: Commands,
-    ui_assets: Res<menu::Assets>
-) {
-
-    commands
-    .spawn_bundle(ButtonBundle {
-        style: Style {
-            align_self: AlignSelf::Center,
-            align_items: AlignItems::Center,
-            justify_content: JustifyContent::Center,
-            size: Size::new(Val::Percent(20.0), Val::Percent(10.0)),
-            margin: Rect::all(Val::Auto),
-            ..default()
-        },
-        color: Color::NONE.into(),
-        ..default()
-    })
-    .insert(menu::ButtonActive(true))
-    .with_children(|parent| {
-        parent.spawn_bundle( ImageBundle {
-            style: Style {
-                size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::Center,
-                ..default()
-            },
-            image: ui_assets.button.clone().into(),
-            ..default()
-        })
-            .insert(FocusPolicy::Pass)
-            .with_children(|parent| {
-                parent.spawn_bundle(TextBundle {
-                    text: Text::with_section(
-                        "Play",
-                        TextStyle {
-                            font: ui_assets.font.clone(),
-                            font_size: 90.0,
-                            color: Color::rgb(0.9, 0.9, 0.9),
-                        },
-                        Default::default()),
-                    ..default()
-                });
-            });
-    });
-
+fn destroy_background(mut commands: Commands, query: Query<Entity, With<decors::Type>>) {
+    for ent in query.iter() {
+        commands.entity(ent).despawn_recursive();
+    }
 }
