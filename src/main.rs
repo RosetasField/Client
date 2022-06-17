@@ -14,7 +14,7 @@ mod keyboard;
 
 use scenes::village::VillageScenePlugin;
 use states::GameState;
-use cameras::game_camera::camera_movement::*;
+use cameras::camera_handle::GameCameraPlugin;
 use startup::*;
 use scenes::start_menu::MainMenuPlugin;
 use keyboard::*;

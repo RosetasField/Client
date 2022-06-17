@@ -1,3 +1,3 @@
-pub mod game_camera;
-pub mod menu_camera;
+pub mod cameras;
+pub mod camera_handle;
 pub mod util;

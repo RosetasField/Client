@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::cameras::{menu_camera::menu_camera::*, game_camera::game_camera::*};
+use crate::cameras::*;
 
 pub fn spawn_camera(
     mut commands: Commands,
@@ -11,9 +11,8 @@ pub fn spawn_camera(
 
     commands
     .spawn_bundle(camera)
-    .insert(GameCamera::default())
-    .insert(MainCamera);
+    .insert(cameras::GameCamera::default())
+    .insert(cameras::MainCamera);
 
     commands.spawn_bundle(UiCameraBundle::default());
-
 }

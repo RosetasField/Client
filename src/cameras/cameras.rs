@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
 #[derive(Component)]
+pub struct MainCamera;
+
+#[derive(Component)]
 pub struct GameCamera {
 	/// The sensitivity of the GameCameras's motion based on mouse movement. Defaults to `1.0`
 	pub sensitivity: f32,

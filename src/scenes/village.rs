@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::cameras::game_camera::game_camera::GameCamera;
+use crate::cameras::cameras::GameCamera;
 use crate::entities::*;
 
 use crate::states::GameState;
@@ -51,5 +51,6 @@ fn setup_menu(
         transform.look_at(Vec3::new(15.0, 0.5, 0.0), Vec3::Y);
         transform.with_translation(Vec3::new(15.0, 60.0, 10.0));
         projection.0.scale = 50.0;
+        transform.translation = Vec3::new(15.0, 60.0, 10.0);
     }
 }

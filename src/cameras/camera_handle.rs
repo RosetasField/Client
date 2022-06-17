@@ -1,10 +1,10 @@
 use bevy::{prelude::*, input::mouse::*};
 
-use super::game_camera::GameCamera;
+use super::cameras::GameCamera;
 
 use crate::states::*;
 
-use super::super::util::movement_axis;
+use super::util::movement_axis;
 
 fn handle_mouse_scroll(
 	mut query: Query<&mut OrthographicProjection, With<GameCamera>>,
@@ -112,7 +112,7 @@ fn move_camera(
 			)
 
 		}
-		
+
 		else {
 			(options.vel.x * options.sensitivity, options.vel.y * options.sensitivity)
 		};
