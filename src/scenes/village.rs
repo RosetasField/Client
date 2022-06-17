@@ -1,9 +1,8 @@
-use bevy::{prelude::*, pbr::MeshUniform};
+use bevy::prelude::*;
 
-#[path = "../structures/mod.rs"]
-mod structures;
-use structures::structures::*;
+use crate::entities::*;
 
+use crate::entities::structures::load_assets;
 use crate::states::GameState;
 
 pub struct VillageScenePlugin;
@@ -27,9 +26,9 @@ fn destroy(mut commands: Commands, query: Query<Entity, With<Button>>) {
 
 fn setup_menu(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    asset_server: Res<AssetServer>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    assets: Res<structures::CustomAssets>,
     mut query: Query<(&mut Transform, &mut OrthographicProjection)>,
 ) {
 
@@ -41,17 +40,17 @@ fn setup_menu(
     });
 
     for i in 1..100 {
-        commands.spawn_bundle(HeadQuarters {
-            x: i as f32 * 15.0,
-            y: 0.5,
-            z: 2.0,
-        }.build(&asset_server, materials.as_mut()));
-    
-        commands.spawn_bundle(ManaGenerator {
-            x: i as f32 * 15.0,
-            y: 0.5,
-            z: 18.0,
-        }.build(&asset_server, materials.as_mut()));
+        structures::spawn_head_quarters(
+            i as f32 * 15.0,
+            0.5,
+            2.0,
+            commands.spawn(), &assets, materials.as_mut());
+
+        structures::spawn_mana_generator(
+            i as f32 * 15.0,
+            0.5,
+            18.0,
+            commands.spawn(), &assets, materials.as_mut());
     }
 
     commands.insert_resource(AmbientLight {

@@ -2,23 +2,24 @@ use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::states::GameState;
 
-#[derive(Component)]
-pub struct ButtonActive(bool);
-
-struct UiAssets {
-    font: Handle<Font>,
-    button: Handle<Image>,
-}
+use crate::uis::*;
 
 pub struct MainMenuPlugin;
 
 impl Plugin for MainMenuPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_startup_system(load_assets)
-            .add_system_set(SystemSet::on_enter(GameState::StartMenu).with_system(setup_menu))
-            .add_system_set(SystemSet::on_exit(GameState::StartMenu).with_system(destroy))
-            .add_system_set(SystemSet::on_update(GameState::StartMenu).with_system(handle_start_button));
+
+            .add_startup_system(menu::load_assets)
+
+            .add_system_set(SystemSet::on_enter(GameState::StartMenu)
+                .with_system(setup))
+
+            .add_system_set(SystemSet::on_exit(GameState::StartMenu)
+                .with_system(destroy))
+
+            .add_system_set(SystemSet::on_update(GameState::StartMenu)
+                .with_system(menu::handle_start_button));
     }
 }
 
@@ -28,39 +29,9 @@ fn destroy(mut commands: Commands, query: Query<Entity, With<Button>>) {
     }
 }
 
-fn handle_start_button(
-    mut query: Query<(&mut ButtonActive, &Interaction), Changed<Interaction>>,
-    mut app_state: ResMut<State<GameState>>
-) {
-    for (mut active, interaction) in query.iter_mut() {
-        match interaction {
-            Interaction::Clicked => {
-                if active.0 {
-                    app_state.set(GameState::Village).unwrap();
-                    active.0 = false;
-                }
-            }
-            Interaction::Hovered => {},
-            Interaction::None => {},
-        }
-    }
-}
-
-fn load_assets(
+fn setup(
     mut commands: Commands,
-    assets: Res<AssetServer>
-) {
-    let ui_assets = UiAssets {
-        font: assets.load("IMMORTAL.ttf"),
-        button: assets.load("button.png")
-    };
-
-    commands.insert_resource(ui_assets);
-}
-
-fn setup_menu(
-    mut commands: Commands,
-    ui_assets: Res<UiAssets>
+    ui_assets: Res<menu::Assets>
 ) {
 
     commands
@@ -76,7 +47,7 @@ fn setup_menu(
         color: Color::NONE.into(),
         ..default()
     })
-    .insert(ButtonActive(true))
+    .insert(menu::ButtonActive(true))
     .with_children(|parent| {
         parent.spawn_bundle( ImageBundle {
             style: Style {

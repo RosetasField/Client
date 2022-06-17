@@ -4,21 +4,21 @@ use bevy_egui::{egui, EguiContext, EguiPlugin};
 
 use bevy_obj::*;
 
+mod uis;
+mod entities;
 mod states;
+mod cameras;
+mod startup;
+mod scenes;
+mod keyboard;
+
 use scenes::village::VillageScenePlugin;
 use states::GameState;
-
-mod cameras;
 use cameras::game_camera::camera_movement::*;
-
-mod startup;
 use startup::*;
-
-mod scenes;
 use scenes::start_menu::MainMenuPlugin;
-
-mod keyboard;
 use keyboard::*;
+use entities::*;
 
 fn main() {
     App::new()
@@ -31,10 +31,12 @@ fn main() {
             ..default()
         })
         .insert_resource(Msaa { samples: 4 })
+        .insert_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
 
         .add_state(GameState::StartMenu)
 
         .add_startup_system(spawn_camera)
+        .add_startup_system(structures::load_assets)
         .add_system(ui_example)
 
         .add_plugins(DefaultPlugins)
