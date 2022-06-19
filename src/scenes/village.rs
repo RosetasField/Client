@@ -19,7 +19,8 @@ impl Plugin for VillageScenePlugin {
             .add_system_set(SystemSet::on_enter(GameState::Village)
                 .with_system(reset_camera)
                 .with_system(construct)
-                .with_system(construct_ui)
+
+                .with_system(village::construct_resources_infos)
             )
 
             .add_system_set(SystemSet::on_exit(GameState::Village)
@@ -69,16 +70,6 @@ fn construct(
 
 }
 
-fn construct_ui(
-    mut commands: Commands,
-    assets: Res<village::Assets>
-) {
-    village::construct_gold_infos(commands.spawn(), &assets);
-    // village::construct_mana_infos(commands.spawn(), &assets);
-    // village::construct_grimoire_infos(commands.spawn(), &assets);
-    village::construct_player_infos(commands.spawn(), &assets);
-}
-
 fn destroy_structures(mut commands: Commands, query: Query<Entity, With<structures::Type>>) {
     for ent in query.iter() {
         commands.entity(ent).despawn_recursive();
@@ -91,7 +82,7 @@ fn destroy_lights(mut commands: Commands, query: Query<Entity, With<LightEntity>
     }
 }
 
-fn destroy_ui(mut commands: Commands, query: Query<Entity, With<Button>>) {
+fn destroy_ui(mut commands: Commands, query: Query<Entity, With<village::ResourcesInfo>>) {
     for ent in query.iter() {
         commands.entity(ent).despawn_recursive();
     }

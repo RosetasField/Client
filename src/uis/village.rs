@@ -1,5 +1,4 @@
 use bevy::{prelude::*, ui::FocusPolicy};
-use bevy::ecs::system::EntityCommands;
 
 pub struct Assets {
     pub font: Handle<Font>,
@@ -7,6 +6,9 @@ pub struct Assets {
     pub mana_icon: Handle<Image>,
     pub grimoire_icon: Handle<Image>,
 }
+
+#[derive(Component)]
+pub struct ResourcesInfo;
 
 pub fn load_assets(
     mut commands: Commands,
@@ -22,39 +24,66 @@ pub fn load_assets(
     commands.insert_resource(ui_assets);
 }
 
-pub fn construct_gold_infos(
-    mut commands: EntityCommands,
-    assets: &Res<Assets>
+pub fn construct_resources_infos(
+    mut commands: Commands,
+    assets: Res<Assets>
 ) {
     commands
-        .insert_bundle(ButtonBundle {
+        .spawn_bundle(NodeBundle {
             style: Style {
-                size: Size::new(Val::Percent(20.0), Val::Percent(5.0)),
-                align_items: AlignItems::FlexStart,
-                position: Rect {
-                    bottom: Val::Percent(50.0),
-                    ..default()
-                },
+                size: Size::new(Val::Percent(100.0), Val::Percent(9.0)),
+                align_items: AlignItems::Center,
+                align_self: AlignSelf::FlexEnd,
+                justify_content: JustifyContent::Center,
+                padding: Rect {left: Val::Percent(1.0), ..default()},
                 ..default()
             },
-            color: Color::rgba(1.0, 1.0, 0.0, 0.01).into(),
+            color: Color::rgba(0.0, 0.0, 0.0, 0.0).into(),
             ..default()
         })
+        .insert(ResourcesInfo)
+        .with_children(|parent| {
+            construct_gold_infos(parent, &assets)})
+        .with_children(|parent| {
+            construct_mana_infos(parent, &assets)})
+        .with_children(|parent| {
+            construct_grimoire_infos(parent, &assets)});
+}
+
+pub fn construct_gold_infos(
+    parent: &mut ChildBuilder,
+    assets: &Res<Assets>
+) {
+
+    parent.spawn_bundle(
+            ButtonBundle {
+                style: Style {
+                    size: Size::new(Val::Percent(100.0/6.0), Val::Percent(100.0)),
+                    align_items: AlignItems::Center,
+                    justify_content: JustifyContent::SpaceBetween,
+                    ..default()
+                },
+                color: Color::rgba(1.0, 1.0, 0.0, 0.01).into(),
+                ..default()
+            })
 
         .with_children(|parent| {
             parent.spawn_bundle( ImageBundle {
                 style: Style {
-                    size: Size::new(Val::Percent(20.0), Val::Percent(20.0)),
+                    size: Size::new(Val::Px(100.0), Val::Px(100.0)),
                     ..default()
                 },
                 image: assets.gold_icon.clone().into(),
                 ..default()
-            })
+            });
+        })
+
         .insert(FocusPolicy::Pass)
+
         .with_children(|parent| {
             parent.spawn_bundle(TextBundle {
                 style: Style {
-                    size: Size::new(Val::Percent(80.0), Val::Percent(80.0)),
+                    size: Size::new(Val::Auto, Val::Percent(100.0)),
                     ..default()
                 },
                 text: Text::with_section(
@@ -68,12 +97,102 @@ pub fn construct_gold_infos(
                 ..default()
             });
         });
-    });
 }
 
-pub fn construct_player_infos(
-    commmands: EntityCommands,
+pub fn construct_mana_infos(
+    parent: &mut ChildBuilder,
     assets: &Res<Assets>
 ) {
 
+    parent.spawn_bundle(
+            ButtonBundle {
+                style: Style {
+                    size: Size::new(Val::Percent(100.0/6.0), Val::Percent(100.0)),
+                    align_items: AlignItems::Center,
+                    justify_content: JustifyContent::SpaceBetween,
+                    ..default()
+                },
+                color: Color::rgba(1.0, 1.0, 0.0, 0.01).into(),
+                ..default()
+            })
+
+        .with_children(|parent| {
+            parent.spawn_bundle( ImageBundle {
+                style: Style {
+                    size: Size::new(Val::Px(100.0), Val::Px(100.0)),
+                    ..default()
+                },
+                image: assets.mana_icon.clone().into(),
+                ..default()
+            });
+        })
+
+        .insert(FocusPolicy::Pass)
+
+        .with_children(|parent| {
+            parent.spawn_bundle(TextBundle {
+                style: Style {
+                    size: Size::new(Val::Auto, Val::Percent(100.0)),
+                    ..default()
+                },
+                text: Text::with_section(
+                    "2 292",
+                    TextStyle {
+                        font: assets.font.clone(),
+                        font_size: 50.0,
+                        color: Color::rgb(0.9, 0.9, 0.9),
+                    },
+                    Default::default()),
+                ..default()
+            });
+        });
+}
+
+pub fn construct_grimoire_infos(
+    parent: &mut ChildBuilder,
+    assets: &Res<Assets>
+) {
+
+    parent.spawn_bundle(
+            ButtonBundle {
+                style: Style {
+                    size: Size::new(Val::Percent(100.0/6.0), Val::Percent(100.0)),
+                    align_items: AlignItems::Center,
+                    justify_content: JustifyContent::SpaceBetween,
+                    ..default()
+                },
+                color: Color::rgba(1.0, 1.0, 0.0, 0.01).into(),
+                ..default()
+            })
+
+        .with_children(|parent| {
+            parent.spawn_bundle( ImageBundle {
+                style: Style {
+                    size: Size::new(Val::Px(100.0), Val::Px(100.0)),
+                    ..default()
+                },
+                image: assets.grimoire_icon.clone().into(),
+                ..default()
+            });
+        })
+
+        .insert(FocusPolicy::Pass)
+
+        .with_children(|parent| {
+            parent.spawn_bundle(TextBundle {
+                style: Style {
+                    size: Size::new(Val::Auto, Val::Percent(100.0)),
+                    ..default()
+                },
+                text: Text::with_section(
+                    "95%",
+                    TextStyle {
+                        font: assets.font.clone(),
+                        font_size: 50.0,
+                        color: Color::rgb(0.9, 0.9, 0.9),
+                    },
+                    Default::default()),
+                ..default()
+            });
+        });
 }
