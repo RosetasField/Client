@@ -4,6 +4,8 @@ use bevy::prelude::*;
 use crate::cameras::cameras::GameCamera;
 use crate::entities::*;
 
+use crate::uis::*;
+
 use crate::states::GameState;
 
 pub struct VillageScenePlugin;
@@ -12,14 +14,18 @@ impl Plugin for VillageScenePlugin {
     fn build(&self, app: &mut App) {
         app
 
+            .add_startup_system(village::load_assets)
+
             .add_system_set(SystemSet::on_enter(GameState::Village)
                 .with_system(reset_camera)
                 .with_system(construct)
+                .with_system(construct_ui)
             )
 
             .add_system_set(SystemSet::on_exit(GameState::Village)
                 .with_system(destroy_structures)
                 .with_system(destroy_lights)
+                .with_system(destroy_ui)
             );
     }
 }
@@ -29,10 +35,10 @@ fn reset_camera(
 ) {
 
     for (mut transform, mut projection) in query.iter_mut() {
-        transform.look_at(Vec3::new(15.0, 0.5, 0.0), Vec3::Y);
         transform.with_translation(Vec3::new(15.0, 60.0, 10.0));
         projection.0.scale = 50.0;
         transform.translation = Vec3::new(15.0, 60.0, 10.0);
+        transform.look_at(Vec3::new(15.0, 0.5, 0.0), Vec3::Y);
     }
 }
 
@@ -63,6 +69,16 @@ fn construct(
 
 }
 
+fn construct_ui(
+    mut commands: Commands,
+    assets: Res<village::Assets>
+) {
+    village::construct_gold_infos(commands.spawn(), &assets);
+    // village::construct_mana_infos(commands.spawn(), &assets);
+    // village::construct_grimoire_infos(commands.spawn(), &assets);
+    village::construct_player_infos(commands.spawn(), &assets);
+}
+
 fn destroy_structures(mut commands: Commands, query: Query<Entity, With<structures::Type>>) {
     for ent in query.iter() {
         commands.entity(ent).despawn_recursive();
@@ -70,6 +86,12 @@ fn destroy_structures(mut commands: Commands, query: Query<Entity, With<structur
 }
 
 fn destroy_lights(mut commands: Commands, query: Query<Entity, With<LightEntity>>) {
+    for ent in query.iter() {
+        commands.entity(ent).despawn_recursive();
+    }
+}
+
+fn destroy_ui(mut commands: Commands, query: Query<Entity, With<Button>>) {
     for ent in query.iter() {
         commands.entity(ent).despawn_recursive();
     }

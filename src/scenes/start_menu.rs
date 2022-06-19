@@ -43,7 +43,6 @@ fn construct_buttons(
     menu::construct_start_button(commands.spawn(), &ui_assets);
 }
 
-
 fn destroy_buttons(mut commands: Commands, query: Query<Entity, With<Button>>) {
     for ent in query.iter() {
         commands.entity(ent).despawn_recursive();
