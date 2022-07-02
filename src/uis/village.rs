@@ -1,4 +1,4 @@
-use bevy::{prelude::*, ui::FocusPolicy};
+use bevy::{prelude::*, ui::FocusPolicy, render::camera::RenderTarget, window::WindowId};
 
 pub struct Assets {
     pub font: Handle<Font>,
@@ -9,6 +9,9 @@ pub struct Assets {
 
 #[derive(Component)]
 pub struct ResourcesInfo;
+
+#[derive(Component)]
+pub struct MiniMap;
 
 pub fn load_assets(
     mut commands: Commands,
@@ -48,6 +51,21 @@ pub fn construct_resources_infos(
             construct_mana_infos(parent, &assets)})
         .with_children(|parent| {
             construct_grimoire_infos(parent, &assets)});
+}
+
+pub fn construct_mini_map(
+    mut commands: Commands,
+) {
+    commands.spawn_bundle(
+        NodeBundle {
+            style: Style {
+                size: Size::new(Val::Percent(100.0/6.0), Val::Percent(100.0/6.0)),
+                ..default()
+            },
+            color: Color::rgba(1.0, 1.0, 0.0, 0.01).into(),
+            ..default()
+        })
+        .insert(MiniMap);
 }
 
 pub fn construct_gold_infos(

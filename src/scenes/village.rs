@@ -21,6 +21,8 @@ impl Plugin for VillageScenePlugin {
                 .with_system(construct)
 
                 .with_system(village::construct_resources_infos)
+
+                .with_system(village::construct_mini_map)
             )
 
             .add_system_set(SystemSet::on_exit(GameState::Village)
